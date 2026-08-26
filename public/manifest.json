@@ -1,0 +1,24 @@
+{
+  "short_name": "Dashboard",
+  "name": "Dashboard",
+  "description": "Personal Academic Operating System for Mohamud Mukhtar Adow",
+  "icons": [
+    {
+      "src": "/mohamud.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#171714",
+  "theme_color": "#C9A227",
+  "display": "standalone",
+  "orientation": "portrait"
+}
