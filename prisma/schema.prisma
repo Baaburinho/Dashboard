@@ -1,0 +1,347 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+enum SemesterStatus {
+  Planned
+  Active
+  Completed
+  Archived
+}
+
+enum ActivityType {
+  Assignment
+  Quiz
+  Midterm
+  Final_Exam
+  Project
+  Presentation
+  Lab
+  Attendance
+  Other
+}
+
+enum ActivityStatus {
+  Planned
+  In_Progress
+  Submitted
+  Completed
+  Overdue
+}
+
+enum Priority {
+  Critical
+  High
+  Normal
+  Low
+}
+
+enum MemoryCategory {
+  Achievement
+  Milestone
+  Course_Completion
+  Personal_Reflection
+  Event
+}
+
+enum MemoryImportance {
+  Low
+  Normal
+  Important
+  Milestone
+}
+
+enum RecordProvenance {
+  Verified
+  Personal_Record
+  Seeded
+  Unverified
+}
+
+enum QuoteCategory {
+  Discipline
+  Consistency
+  Learning
+  Academic_Excellence
+  Resilience
+  Focus
+  Leadership
+  Patience
+  Growth
+  Future
+}
+
+model User {
+  id         String   @id @default(uuid())
+  identifier String   @unique // e.g. "CIS231475" or "admin"
+  password   String   // Hashed / verified password
+  role       UserRole @default(STUDENT)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model University {
+  id         String   @id @default(uuid())
+  name       String   @default("Zamzam University of Science and Technology")
+  faculty    String   @default("Faculty of Computer Science & Information Technology")
+  department String   @default("IT")
+  createdAt  DateTime @default(now())
+}
+
+model StudentProfile {
+  id                   String   @id @default(uuid())
+  studentId            String   @unique // "CIS231475"
+  fullName             String   @default("Mohamud Mukhtar Adow")
+  avatarUrl            String?
+  program              String   @default("Bachelor of Science in Information Technology")
+  faculty              String   @default("Faculty of Computer Science & Information Technology")
+  department           String   @default("IT")
+  classBatch           String   @default("Information Technology Batch 3")
+  period               String   @default("Second · 2025–2026")
+  university           String   @default("Zamzam University of Science and Technology")
+  currentSemesterNumber Int     @default(7)
+  academicYear         String   @default("2025 / 2026")
+  enrollmentYear       String   @default("2023")
+  expectedGraduation   String   @default("2027")
+  totalRequiredCredits Int      @default(120)
+  completedCredits     Int      @default(108)
+  remainingCredits     Int      @default(12)
+  academicStanding     String?  @default("Good Standing · Active Degree Candidate")
+  email                String?  @default("mohamud.adow@zamzam.edu.so")
+  phone                String?  @default("+252 61 500 0000")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Semester {
+  id               String           @id @default(uuid())
+  studentId        String           @default("CIS231475")
+  number           Int
+  name             String
+  academicYear     String
+  status           SemesterStatus   @default(Planned)
+  gpa              Float?
+  academicRank     String?
+  totalCredits     Int              @default(18)
+  completedCredits Int              @default(0)
+  startDate        String?
+  endDate          String?
+  summaryNote      String?
+  reflectionQuote  String?
+  provenance       RecordProvenance @default(Personal_Record)
+  sourceNote       String?
+  isArchived       Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model Course {
+  id                   String           @id @default(uuid())
+  semesterId           String
+  studentId            String           @default("CIS231475")
+  code                 String
+  name                 String
+  creditHours          Int              @default(3)
+  lecturer             String
+  room                 String?
+  schedule             String?
+  status               String           @default("Active")
+  progressPercentage   Int              @default(0)
+  grade                String?
+  gradePoint           Float?
+  totalScore           Float?
+  syllabus             String?
+  attendancePresent    Int              @default(0)
+  attendanceTotal      Int              @default(0)
+  assessmentSchemeJson String?
+  provenance           RecordProvenance @default(Personal_Record)
+  sourceNote           String?
+  isArchived           Boolean          @default(false)
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+}
+
+model Activity {
+  id               String           @id @default(uuid())
+  courseId         String
+  studentId        String           @default("CIS231475")
+  semesterId       String
+  courseCode       String
+  courseName       String
+  title            String
+  type             ActivityType     @default(Assignment)
+  description      String?
+  deadline         String
+  status           ActivityStatus   @default(Planned)
+  priority         Priority         @default(Normal)
+  score            Float?
+  maxScore         Float?           @default(20)
+  weightPercentage Float?           @default(10)
+  notes            String?
+  submittedAt      String?
+  provenance       RecordProvenance @default(Personal_Record)
+  sourceNote       String?
+  isArchived       Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model AcademicMemory {
+  id             String           @id @default(uuid())
+  studentId      String           @default("CIS231475")
+  title          String
+  description    String
+  category       MemoryCategory   @default(Achievement)
+  importance     MemoryImportance @default(Normal)
+  semesterNumber Int              @default(7)
+  semesterName   String?
+  date           String
+  isPinned       Boolean          @default(false)
+  tagsJson       String?
+  provenance     RecordProvenance @default(Personal_Record)
+  sourceNote     String?
+  isArchived     Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model MotivationQuote {
+  id         String        @id @default(uuid())
+  quote      String
+  author     String
+  category   QuoteCategory @default(Discipline)
+  isArchived Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model Goal {
+  id                 String   @id @default(uuid())
+  studentId          String   @default("CIS231475")
+  title              String
+  category           String   @default("GPA")
+  targetSemester     Int      @default(7)
+  progressPercentage Int      @default(0)
+  status             String   @default("In Progress")
+  notes              String?
+  isArchived         Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model AcademicTask {
+  id         String   @id @default(uuid())
+  studentId  String   @default("CIS231475")
+  title      String
+  priority   Priority @default(Normal)
+  category   String   @default("Self Study")
+  status     String   @default("Pending")
+  dueDate    String?
+  courseId   String?
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Document {
+  id             String           @id @default(uuid())
+  studentId      String           @default("CIS231475")
+  name           String
+  type           String           @default("Certificate")
+  semesterNumber Int?
+  courseName     String?
+  date           String
+  fileSize       String           @default("500 KB")
+  fileUrl        String?
+  description    String?
+  provenance     RecordProvenance @default(Personal_Record)
+  sourceNote     String?
+  isArchived     Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model FeeRecord {
+  id              String        @id @default(uuid())
+  studentId       String        @default("CIS231475")
+  academicYear    String
+  semesterNumber  Int
+  totalFee        Float
+  paidAmount      Float
+  remainingAmount Float
+  dueDate         String
+  status          String        @default("Paid")
+  isArchived      Boolean       @default(false)
+  payments        PaymentItem[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model PaymentItem {
+  id            String    @id @default(uuid())
+  feeRecordId   String
+  feeRecord     FeeRecord @relation(fields: [feeRecordId], references: [id], onDelete: Cascade)
+  amount        Float
+  date          String
+  method        String    @default("Bank Transfer")
+  receiptNumber String
+  note          String?
+  createdAt     DateTime  @default(now())
+}
+
+model TimetableSlot {
+  id         String   @id @default(uuid())
+  studentId  String   @default("CIS231475")
+  courseId   String
+  courseCode String
+  courseName String
+  day        String   // "Monday", "Tuesday", etc.
+  startTime  String   // "08:00"
+  endTime    String   // "10:00"
+  room       String   // "Lab 2 · CS Block"
+  lecturer   String
+  createdAt  DateTime @default(now())
+}
+
+model CourseNote {
+  id         String   @id @default(uuid())
+  courseId   String
+  studentId  String   @default("CIS231475")
+  title      String
+  content    String
+  tagsJson   String?
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  timestamp  String
+  actorRole  String   @default("STUDENT") // "STUDENT", "ADMIN", "SYSTEM"
+  actorId    String   @default("CIS231475")
+  action     String   // "CREATE", "UPDATE", "SOFT_DELETE", "RESTORE", "IMPORT", "EXPORT", "LOGIN", "LOGOUT", "SCHEMA_MIGRATION"
+  entity     String   // "Course", "Grade", "Semester", "Memory", "Profile", "Settings", etc.
+  entityId   String
+  entityName String
+  oldValue   String?
+  newValue   String?
+  reason     String?
+  createdAt  DateTime @default(now())
+}
+
+model BackupSnapshot {
+  id           String   @id @default(uuid())
+  label        String
+  snapshotJson String
+  createdAt    DateTime @default(now())
+}

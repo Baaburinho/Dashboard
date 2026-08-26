@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // PAOS Academic OS rules
+    match /paos_academic_vault/{studentId} {
+      allow read, write: if true; // Allow client-side offline/online sync for student records
+      
+      match /{document=**} {
+        allow read, write: if true;
+      }
+    }
+  }
+}
