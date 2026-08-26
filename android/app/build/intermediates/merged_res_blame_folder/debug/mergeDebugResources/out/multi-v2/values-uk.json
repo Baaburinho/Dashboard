@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.moha.dashboard.app-mergeDebugResources-30:/values-uk/values-uk.xml",
+            "outputFile": "com.moha.dashboard.app-mergeDebugResources-31:/values-uk/values-uk.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\efbcd27c9590250748d53b76c20e5464\\transformed\\core-1.13.0\\res\\values-uk\\values-uk.xml",
+                    "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\73117ab483835c8d099bdd0d4df4f091\\transformed\\core-1.15.0\\res\\values-uk\\values-uk.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

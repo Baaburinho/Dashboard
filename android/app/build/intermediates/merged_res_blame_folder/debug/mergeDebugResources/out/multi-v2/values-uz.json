@@ -1,8 +1,25 @@
 {
     "logs": [
         {
-            "outputFile": "com.moha.dashboard.app-mergeDebugResources-30:/values-uz/values-uz.xml",
+            "outputFile": "com.moha.dashboard.app-mergeDebugResources-31:/values-uz/values-uz.xml",
             "map": [
+                {
+                    "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\73117ab483835c8d099bdd0d4df4f091\\transformed\\core-1.15.0\\res\\values-uz\\values-uz.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,157,259,360,460,568,672,791",
+                        "endColumns": "101,101,100,99,107,103,118,100",
+                        "endOffsets": "152,254,355,455,563,667,786,887"
+                    },
+                    "to": {
+                        "startLines": "38,39,40,41,42,43,44,116",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "3425,3527,3629,3730,3830,3938,4042,9901",
+                        "endColumns": "101,101,100,99,107,103,118,100",
+                        "endOffsets": "3522,3624,3725,3825,3933,4037,4156,9997"
+                    }
+                },
                 {
                     "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\8de6eec9644391b4ccd482d17e2acf4a\\transformed\\material-1.12.0\\res\\values-uz\\values-uz.xml",
                     "from": {
@@ -37,23 +54,6 @@
                         "startOffsets": "333,438,533,633,715,815,932,1017,1095,1186,1279,1374,1468,1562,1655,1750,1845,1936,2028,2112,2222,2328,2428,2536,2642,2744,2905,9580",
                         "endColumns": "104,94,99,81,99,116,84,77,90,92,94,93,93,92,94,94,90,91,83,109,105,99,107,105,101,160,98,83",
                         "endOffsets": "433,528,628,710,810,927,1012,1090,1181,1274,1369,1463,1557,1650,1745,1840,1931,2023,2107,2217,2323,2423,2531,2637,2739,2900,2999,9659"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\efbcd27c9590250748d53b76c20e5464\\transformed\\core-1.13.0\\res\\values-uz\\values-uz.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,157,259,360,460,568,672,791",
-                        "endColumns": "101,101,100,99,107,103,118,100",
-                        "endOffsets": "152,254,355,455,563,667,786,887"
-                    },
-                    "to": {
-                        "startLines": "38,39,40,41,42,43,44,116",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "3425,3527,3629,3730,3830,3938,4042,9901",
-                        "endColumns": "101,101,100,99,107,103,118,100",
-                        "endOffsets": "3522,3624,3725,3825,3933,4037,4156,9997"
                     }
                 }
             ]

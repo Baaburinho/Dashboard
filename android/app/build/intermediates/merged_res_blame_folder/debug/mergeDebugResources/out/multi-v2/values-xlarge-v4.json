@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.moha.dashboard.app-mergeDebugResources-30:/values-xlarge-v4/values-xlarge-v4.xml",
+            "outputFile": "com.moha.dashboard.app-mergeDebugResources-31:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
                     "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\cdca1353572f129cd65e15cbcdcffa46\\transformed\\appcompat-1.7.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",

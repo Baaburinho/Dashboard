@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.moha.dashboard.app-mergeDebugResources-30:/values-sw600dp-v13/values-sw600dp-v13.xml",
+            "outputFile": "com.moha.dashboard.app-mergeDebugResources-31:/values-sw600dp-v13/values-sw600dp-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\MOHA\\.gradle\\caches\\8.14.3\\transforms\\cdca1353572f129cd65e15cbcdcffa46\\transformed\\appcompat-1.7.0\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
