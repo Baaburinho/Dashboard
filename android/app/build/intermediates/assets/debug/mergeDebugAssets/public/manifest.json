@@ -1,12 +1,12 @@
 {
   "short_name": "Dashboard",
   "name": "Dashboard",
-  "description": "Personal Academic Operating System for Mohamud Mukhtar Adow",
+  "description": "PAOS — Personal Academic Operating System",
   "icons": [
     {
-      "src": "/mohamud.jpg",
-      "sizes": "192x192 512x512",
-      "type": "image/jpeg",
+      "src": "/paos_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
