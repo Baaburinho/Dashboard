@@ -38,6 +38,7 @@ import {
   initialNotifications,
   initialQuotes
 } from '../data/seedData';
+import mohamudDefaultAvatar from '../assets/mohamud.jpg';
 import { calculateCgpaFromLedger } from '../utils/academicEngine';
 import { paosDB } from '../services/db';
 import { api } from '../services/api';
@@ -174,7 +175,10 @@ export const AcademicProvider: React.FC<{ children: ReactNode }> = ({ children }
       if (!item) return fallback;
       const parsed = JSON.parse(item);
       if (key === 'student' && parsed) {
-        return { ...parsed, avatarUrl: '/mohamud.jpg' };
+        return {
+          ...parsed,
+          avatarUrl: parsed.avatarUrl && parsed.avatarUrl.startsWith('data:image') ? parsed.avatarUrl : mohamudDefaultAvatar,
+        };
       }
       if (key === 'memories' && Array.isArray(parsed)) {
         const hasEnglishTitle = parsed.some((m: any) => m.title?.includes('Ranked #2 of 46'));

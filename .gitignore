@@ -14,6 +14,10 @@ dist-ssr
 .env
 .env.*
 !.env.example
+.gradle/
+android/.gradle/
+android/build/
+android/app/build/
 
 # Editor directories and files
 .vscode/*
