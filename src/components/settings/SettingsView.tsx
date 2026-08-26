@@ -21,7 +21,10 @@ import {
   History,
   X,
   Camera,
-  ArrowRight
+  ArrowRight,
+  Bell,
+  BellRing,
+  Volume2,
 } from 'lucide-react';
 import { useAcademic } from '../../context/AcademicContext';
 import { GradeScaleItem, BackupValidationResult } from '../../types';
@@ -48,9 +51,13 @@ export const SettingsView: React.FC = () => {
     pullFromFirebaseCloud,
     setCurrentRole,
     loginAsAdmin,
+    notifications,
+    markNotificationRead,
+    markAllNotificationsRead,
+    clearNotification,
   } = useAcademic();
 
-  const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'firebase' | 'backups' | 'admin' | 'danger'>('profile');
+  const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'notifications' | 'firebase' | 'backups' | 'admin' | 'danger'>('profile');
   const [adminPass, setAdminPass] = useState('admin2026');
   const [adminError, setAdminError] = useState('');
 
@@ -197,6 +204,22 @@ export const SettingsView: React.FC = () => {
           }`}
         >
           Student Profile
+        </button>
+        <button
+          onClick={() => setActiveSettingsTab('notifications')}
+          className={`px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+            activeSettingsTab === 'notifications'
+              ? 'bg-[#C9A227] text-[#171714] shadow-[0_6px_16px_rgba(201,162,39,0.18)]'
+              : 'text-[#66645C] dark:text-[#E8E1CF]/70 hover:bg-[#FBF7E8] dark:hover:bg-[#F4E7A1]/8'
+          }`}
+        >
+          <Bell className="w-3.5 h-3.5" />
+          <span>Notifications & Alerts</span>
+          {notifications.filter(n => !n.isRead).length > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full bg-[#171714] text-[#F4E7A1] text-[10px] font-bold">
+              {notifications.filter(n => !n.isRead).length}
+            </span>
+          )}
         </button>
         <button
           onClick={() => setActiveSettingsTab('firebase')}
@@ -424,6 +447,151 @@ export const SettingsView: React.FC = () => {
               </Button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* Notifications & Alerts Center */}
+      {activeSettingsTab === 'notifications' && (
+        <div className="space-y-5">
+          <div className="dashboard-surface rounded-[24px] bg-[#FFFFFF] dark:bg-[#24231D]/90 border border-[#E8E1CF]/80 dark:border-[#E8E1CF]/18 p-5 sm:p-6 shadow-[0_14px_34px_rgba(23,23,20,0.06)] space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E8E1CF] dark:border-[#E8E1CF]/18">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-gradient-to-tr from-[#171714] to-[#C9A227] text-[#FFFDF5] shadow-[0_4px_14px_rgba(201,162,39,0.2)]">
+                  <Bell className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-[#171714] dark:text-[#FFFDF5]">
+                    Academic Notifications & Alert Engine
+                  </h3>
+                  <p className="text-xs text-[#66645C] dark:text-[#E8E1CF]/70">
+                    Control real-time notices, timetable alerts, and graduation target reminders
+                  </p>
+                </div>
+              </div>
+              {notifications.length > 0 && (
+                <button
+                  onClick={markAllNotificationsRead}
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#FBF7E8] dark:bg-[#F4E7A1]/8 text-[#171714] dark:text-[#F4E7A1] border border-[#E8E1CF] dark:border-[#E8E1CF]/18 hover:border-[#C9A227] transition-all cursor-pointer"
+                >
+                  Mark All as Read
+                </button>
+              )}
+            </div>
+
+            {/* Notification Preferences Switches */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div className="p-4 rounded-2xl bg-[#FBF7E8]/60 dark:bg-[#1C1B16] border border-[#E8E1CF]/80 dark:border-[#383428] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-[#C9A227]/15 dark:bg-[#C9A227]/20 flex items-center justify-center text-[#C9A227]">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5]">Semester & Honors Alerts</h4>
+                    <p className="text-[11px] text-[#66645C] dark:text-[#E8E1CF]/70">Notify on CGPA changes & milestone targets</p>
+                  </div>
+                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#6B7D45] ring-4 ring-[#6B7D45]/20" />
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#FBF7E8]/60 dark:bg-[#1C1B16] border border-[#E8E1CF]/80 dark:border-[#383428] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-[#C9A227]/15 dark:bg-[#C9A227]/20 flex items-center justify-center text-[#C9A227]">
+                    <BellRing className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5]">Timetable & Lecture Reminders</h4>
+                    <p className="text-[11px] text-[#66645C] dark:text-[#E8E1CF]/70">15-minute advance slot reminders</p>
+                  </div>
+                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#6B7D45] ring-4 ring-[#6B7D45]/20" />
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#FBF7E8]/60 dark:bg-[#1C1B16] border border-[#E8E1CF]/80 dark:border-[#383428] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-[#C9A227]/15 dark:bg-[#C9A227]/20 flex items-center justify-center text-[#C9A227]">
+                    <Cloud className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5]">Cloud Sync Status Notices</h4>
+                    <p className="text-[11px] text-[#66645C] dark:text-[#E8E1CF]/70">Firebase sync success & backup notifications</p>
+                  </div>
+                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#6B7D45] ring-4 ring-[#6B7D45]/20" />
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#FBF7E8]/60 dark:bg-[#1C1B16] border border-[#E8E1CF]/80 dark:border-[#383428] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-[#C9A227]/15 dark:bg-[#C9A227]/20 flex items-center justify-center text-[#C9A227]">
+                    <Volume2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5]">Haptic & Sound Feedback</h4>
+                    <p className="text-[11px] text-[#66645C] dark:text-[#E8E1CF]/70">Subtle alert tones on record additions</p>
+                  </div>
+                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#6B7D45] ring-4 ring-[#6B7D45]/20" />
+              </div>
+            </div>
+
+            {/* Live Notifications Feed */}
+            <div className="pt-2">
+              <h4 className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5] mb-3 flex items-center gap-2">
+                <span>Active Notifications Archive</span>
+                <span className="px-2 py-0.5 rounded-full bg-[#C9A227]/15 text-[#C9A227] text-[10px] font-bold">
+                  {notifications.length} Total
+                </span>
+              </h4>
+
+              <div className="space-y-2.5">
+                {notifications.length === 0 ? (
+                  <div className="p-8 text-center rounded-2xl bg-[#FBF7E8]/50 dark:bg-[#1C1B16] border border-[#E8E1CF] dark:border-[#383428] text-xs text-[#66645C] dark:text-[#E8E1CF]/70">
+                    No active notifications. You are completely up-to-date!
+                  </div>
+                ) : (
+                  notifications.map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => markNotificationRead(n.id)}
+                      className={`p-4 rounded-2xl border transition-all flex items-start justify-between gap-3 cursor-pointer ${
+                        !n.isRead
+                          ? 'bg-[#FBF7E8] dark:bg-[#2A2820] border-[#C9A227]/40 shadow-xs'
+                          : 'bg-[#FFFFFF] dark:bg-[#1C1B16] border-[#E8E1CF]/70 dark:border-[#383428] opacity-80 hover:opacity-100'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3 min-w-0 flex-1">
+                        <div className="mt-0.5 p-1.5 rounded-lg bg-[#C9A227]/15 text-[#C9A227] shrink-0">
+                          <Bell className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h5 className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5] truncate">{n.title}</h5>
+                            {!n.isRead && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]" />
+                            )}
+                          </div>
+                          <p className="text-[11px] text-[#66645C] dark:text-[#E8E1CF]/75 mt-0.5 leading-relaxed">{n.message}</p>
+                          <span className="text-[10px] text-[#8C826D] dark:text-[#E8E1CF]/50 mt-1 inline-block font-mono">
+                            {new Date(n.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          clearNotification(n.id);
+                        }}
+                        className="p-1.5 rounded-lg text-[#66645C] dark:text-[#E8E1CF]/60 hover:text-[#9B3D32] hover:bg-[#9B3D32]/10 transition-colors"
+                        title="Dismiss notification"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

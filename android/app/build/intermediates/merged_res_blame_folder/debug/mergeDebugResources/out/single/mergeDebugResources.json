@@ -36,12 +36,12 @@
         "source": "com.moha.dashboard.app-main-34:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\MOHA\\.gradle\\daemon\\8.14.3\\com.moha.dashboard.app-debug-32:\\mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\MOHA\\.gradle\\daemon\\8.14.3\\com.moha.dashboard.app-main-34:\\mipmap-xhdpi\\ic_launcher_round.png"
-    },
-    {
         "merged": "C:\\Users\\MOHA\\.gradle\\daemon\\8.14.3\\com.moha.dashboard.app-debug-32:\\layout_activity_main.xml.flat",
         "source": "C:\\Users\\MOHA\\.gradle\\daemon\\8.14.3\\com.moha.dashboard.app-main-34:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\MOHA\\.gradle\\daemon\\8.14.3\\com.moha.dashboard.app-debug-32:\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\MOHA\\.gradle\\daemon\\8.14.3\\com.moha.dashboard.app-main-34:\\mipmap-xhdpi\\ic_launcher_round.png"
     },
     {
         "merged": "com.moha.dashboard.app-debug-32:/mipmap-mdpi_ic_launcher.png.flat",
