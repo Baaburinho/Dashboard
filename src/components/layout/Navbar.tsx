@@ -66,8 +66,8 @@ export const Navbar: React.FC = () => {
   const isSyncing = firebaseStatus === 'syncing' || isSyncingLocal;
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-[#E8E1CF] dark:border-[#E8E1CF]/18 bg-[#FFFDF5]/92 dark:bg-[#171714]/92 backdrop-blur-xl transition-colors duration-200 select-none">
-      <div className="flex h-[72px] w-full items-center gap-3 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 w-full border-b border-[#E8E1CF] dark:border-[#383428] bg-[#FFFDF5]/95 dark:bg-[#171714]/95 backdrop-blur-xl transition-colors duration-200 select-none pt-[env(safe-area-inset-top,0px)]">
+      <div className="flex h-16 sm:h-[72px] w-full items-center gap-2.5 sm:gap-3 px-3.5 sm:px-6 lg:px-8">
         {/* Mobile brand */}
         <div className="flex shrink-0 items-center md:hidden">
           <Logo showSubtitle={false} />

@@ -25,7 +25,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenMobileMenu }) => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF]/95 dark:bg-[#171714]/95 border-t border-[#E8E1CF] dark:border-emerald-100/10 backdrop-blur-lg px-2 py-2 flex items-center justify-around select-none shadow-[0_-8px_24px_rgba(20,45,34,0.08)]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF]/95 dark:bg-[#171714]/95 border-t border-[#E8E1CF] dark:border-[#383428] backdrop-blur-xl px-2 pt-2 pb-[max(env(safe-area-inset-bottom),16px)] flex items-center justify-around select-none shadow-[0_-10px_30px_rgba(23,23,20,0.12)] transition-all">
       {primaryTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -34,14 +34,15 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenMobileMenu }) => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-medium transition-all ${
+            aria-label={tab.label}
+            className={`flex flex-col items-center justify-center min-w-[52px] py-1 px-2 rounded-2xl transition-all cursor-pointer ${
               isActive
-                ? 'text-[#C9A227] dark:text-[#F4E7A1] font-bold'
-                : 'text-[#66645C] dark:text-[#E8E1CF]/70 hover:text-[#171714] dark:hover:text-[#FFFDF5]'
+                ? 'text-[#C9A227] dark:text-[#F4E7A1] bg-[#F4E7A1]/25 dark:bg-[#C9A227]/18 font-bold shadow-2xs'
+                : 'text-[#66645C] dark:text-[#E8E1CF]/70 hover:text-[#171714] dark:hover:text-[#FFFDF5] font-medium'
             }`}
           >
-            <Icon className={`w-4 h-4 mb-0.5 ${isActive ? 'scale-110' : ''}`} />
-            <span>{tab.label}</span>
+            <Icon className={`w-4 h-4 mb-0.5 transition-transform ${isActive ? 'scale-110 text-[#C9A227] dark:text-[#F4E7A1]' : ''}`} />
+            <span className="text-[10px] tracking-tight whitespace-nowrap">{tab.label}</span>
           </button>
         );
       })}
@@ -49,10 +50,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenMobileMenu }) => {
       <button
         onClick={onOpenMobileMenu}
         aria-label="Open More options"
-        className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+        className="flex flex-col items-center justify-center min-w-[52px] py-1 px-2 rounded-2xl text-[#66645C] dark:text-[#E8E1CF]/70 hover:text-[#171714] dark:hover:text-[#FFFDF5] font-medium transition-all cursor-pointer"
       >
         <Menu className="w-4 h-4 mb-0.5" />
-        <span>More</span>
+        <span className="text-[10px] tracking-tight whitespace-nowrap">More</span>
       </button>
     </nav>
   );
