@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Dashboard" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">#171714</item>
-        <item name="android:navigationBarColor">#171714</item>
-        <item name="android:windowBackground">#171714</item>
+        <item name="android:statusBarColor">#FFFDF5</item>
+        <item name="android:navigationBarColor">#FFFDF5</item>
+        <item name="android:windowBackground">#FFFDF5</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 </resources>

@@ -25,7 +25,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenMobileMenu }) => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF]/95 dark:bg-[#171714]/95 border-t border-[#E8E1CF] dark:border-[#383428] backdrop-blur-xl px-2 pt-2 pb-[max(env(safe-area-inset-bottom),16px)] flex items-center justify-around select-none shadow-[0_-10px_30px_rgba(23,23,20,0.12)] transition-all">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFDF5]/95 dark:bg-[#171714]/95 border-t border-[#E8E1CF] dark:border-[#383428] backdrop-blur-xl px-2 py-2.5 flex items-center justify-around select-none shadow-[0_-4px_20px_rgba(23,23,20,0.06)] transition-all">
       {primaryTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
