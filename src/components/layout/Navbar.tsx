@@ -162,22 +162,34 @@ export const Navbar: React.FC = () => {
                 aria-expanded={isNotifDropdownOpen}
                 className="relative flex h-8 w-8 items-center justify-center rounded-lg text-[#66645C] transition-colors hover:bg-[#FFFFFF] hover:text-[#171714] dark:text-[#E8E1CF]/70 dark:hover:bg-[#F4E7A1]/12 dark:hover:text-[#FFFDF5]"
               >
-                <Bell className="h-3.5 w-3.5" />
+                <Bell className="h-4 w-4 text-[#C9A227]" />
                 {unreadCount > 0 && (
-                  <span className="absolute right-1 top-1 flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#C9A227] opacity-60" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#C9A227]" />
+                  <span className="absolute right-1 top-1 flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#C9A227] opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#C9A227] ring-2 ring-[#FFFDF5] dark:ring-[#171714]" />
                   </span>
                 )}
               </button>
 
+              {/* Mobile Backdrop */}
               {isNotifDropdownOpen && (
-                <div className="absolute right-0 top-11 z-50 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#E8E1CF] bg-[#FFFFFF] py-2 shadow-[0_18px_42px_rgba(23,23,20,0.14)] animate-in fade-in slide-in-from-top-2 duration-150 dark:border-[#E8E1CF]/18 dark:bg-[#24231D]">
-                  <div className="flex items-center justify-between gap-3 border-b border-[#E8E1CF] px-4 py-3 dark:border-[#E8E1CF]/12">
+                <div
+                  className="fixed inset-0 z-40 bg-black/40 backdrop-blur-xs sm:hidden"
+                  onClick={() => setIsNotifDropdownOpen(false)}
+                />
+              )}
+
+              {isNotifDropdownOpen && (
+                <div className="fixed inset-x-3 top-16 z-50 mx-auto max-w-[340px] overflow-hidden rounded-2xl border border-[#C9A227]/30 bg-[#FFFDF5] shadow-[0_20px_50px_rgba(23,23,20,0.28)] animate-in fade-in zoom-in-95 duration-150 sm:absolute sm:inset-auto sm:right-0 sm:top-11 sm:w-80 dark:border-[#C9A227]/25 dark:bg-[#1C1B16]">
+                  {/* Luxury Header */}
+                  <div className="flex items-center justify-between border-b border-[#C9A227]/20 bg-gradient-to-r from-[#171714] to-[#25241D] px-4 py-3 text-[#FFFDF5]">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#171714] dark:text-[#FFFDF5]">Academic alerts</span>
+                      <div className="p-1 rounded-lg bg-[#C9A227]/20 text-[#F4E7A1]">
+                        <Bell className="h-3.5 w-3.5" />
+                      </div>
+                      <span className="text-xs font-bold tracking-tight">Academic Alerts</span>
                       {unreadCount > 0 && (
-                        <span className="rounded-full bg-[#F4E7A1] px-2 py-0.5 text-[10px] font-semibold text-[#171714] dark:bg-[#F4E7A1]/12 dark:text-[#F4E7A1]">
+                        <span className="rounded-full bg-[#C9A227] px-2 py-0.5 text-[10px] font-extrabold text-[#171714]">
                           {unreadCount} new
                         </span>
                       )}
@@ -185,18 +197,23 @@ export const Navbar: React.FC = () => {
                     {unreadCount > 0 && (
                       <button
                         onClick={markAllNotificationsRead}
-                        className="flex items-center gap-1 text-[11px] font-medium text-[#66645C] hover:text-[#C9A227] dark:text-[#E8E1CF]/70 dark:hover:text-[#F4E7A1]"
+                        className="flex items-center gap-1 text-[11px] font-semibold text-[#F4E7A1] hover:text-white transition-colors cursor-pointer"
                       >
                         <CheckCheck className="h-3.5 w-3.5" />
-                        Mark read
+                        <span>All read</span>
                       </button>
                     )}
                   </div>
 
-                  <div className="max-h-72 divide-y divide-[#E8E1CF] overflow-y-auto dark:divide-[#E8E1CF]/12">
+                  {/* Notification List */}
+                  <div className="max-h-72 divide-y divide-[#E8E1CF]/70 overflow-y-auto dark:divide-[#383428]">
                     {notifications.length === 0 ? (
-                      <div className="px-4 py-8 text-center text-xs text-[#66645C] dark:text-[#E8E1CF]/70">
-                        No active notifications.
+                      <div className="p-8 text-center">
+                        <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#C9A227]/10 text-[#C9A227]">
+                          <GraduationCap className="h-5 w-5" />
+                        </div>
+                        <p className="text-xs font-semibold text-[#171714] dark:text-[#FFFDF5]">No active notifications</p>
+                        <p className="mt-0.5 text-[11px] text-[#66645C] dark:text-[#E8E1CF]/60">Your academic feed is up to date!</p>
                       </div>
                     ) : (
                       notifications.map((n) => (
@@ -209,38 +226,54 @@ export const Navbar: React.FC = () => {
                               setIsNotifDropdownOpen(false);
                             }
                           }}
-                          className={`flex cursor-pointer items-start gap-3 p-3 text-left transition-colors hover:bg-[#FBF7E8] dark:hover:bg-[#F4E7A1]/8 ${
-                            !n.isRead ? 'bg-[#F4E7A1]/25 dark:bg-[#F4E7A1]/8' : ''
+                          className={`flex cursor-pointer items-start gap-3 p-3.5 text-left transition-colors hover:bg-[#FBF7E8] dark:hover:bg-[#25241D] ${
+                            !n.isRead ? 'bg-[#FBF7E8]/80 dark:bg-[#2A2820]/90' : ''
                           }`}
                         >
-                          <div className="mt-0.5 shrink-0">
+                          <div className="mt-0.5 shrink-0 p-1.5 rounded-lg bg-[#C9A227]/15 text-[#C9A227]">
                             {n.category === 'Achievement' || n.category === 'Memory' ? (
-                              <Sparkles className="h-3.5 w-3.5 text-[#C9A227]" />
+                              <Sparkles className="h-3.5 w-3.5" />
                             ) : n.category === 'Deadline' ? (
                               <span className="inline-block h-2 w-2 rounded-full bg-[#B7791F]" />
                             ) : (
-                              <GraduationCap className="h-3.5 w-3.5 text-[#C9A227]" />
+                              <GraduationCap className="h-3.5 w-3.5" />
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-2">
-                              <p className="truncate text-xs font-semibold text-[#171714] dark:text-[#FFFDF5]">{n.title}</p>
+                              <p className="truncate text-xs font-bold text-[#171714] dark:text-[#FFFDF5]">{n.title}</p>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   clearNotification(n.id);
                                 }}
                                 aria-label={`Dismiss ${n.title}`}
-                                className="shrink-0 p-0.5 text-[#66645C] hover:text-[#9B3D32] dark:text-[#E8E1CF]/70 dark:hover:text-[#E8E1CF]"
+                                className="shrink-0 p-1 text-[#66645C] hover:text-[#9B3D32] dark:text-[#E8E1CF]/60 dark:hover:text-[#FFFDF5]"
                               >
                                 <X className="h-3 w-3" />
                               </button>
                             </div>
-                            <p className="mt-0.5 line-clamp-2 text-[11px] text-[#66645C] dark:text-[#E8E1CF]/70">{n.message}</p>
+                            <p className="mt-0.5 text-[11px] text-[#66645C] dark:text-[#E8E1CF]/75 leading-relaxed">{n.message}</p>
+                            <span className="text-[10px] font-mono text-[#8C826D] dark:text-[#E8E1CF]/50 mt-1 inline-block">
+                              {new Date(n.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </span>
                           </div>
                         </div>
                       ))
                     )}
+                  </div>
+
+                  {/* Footer Link to Settings */}
+                  <div className="border-t border-[#E8E1CF]/80 bg-[#FBF7E8]/70 px-4 py-2.5 text-center dark:border-[#383428] dark:bg-[#171714]">
+                    <button
+                      onClick={() => {
+                        setActiveTab('settings');
+                        setIsNotifDropdownOpen(false);
+                      }}
+                      className="text-[11px] font-bold text-[#C9A227] hover:underline cursor-pointer"
+                    >
+                      Notification Preferences in Settings →
+                    </button>
                   </div>
                 </div>
               )}

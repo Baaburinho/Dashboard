@@ -759,6 +759,14 @@ export const AcademicProvider: React.FC<{ children: ReactNode }> = ({ children }
     logAudit('SOFT_DELETE', 'Course', id, `${course.code} - ${course.name}`, undefined, 'Soft-deleted / archived', reason || 'User archived course');
   };
 
+  const deleteCourse = (id: string) => {
+    const course = courses.find((c) => c.id === id);
+    if (!course) return;
+    setCourses((prev) => prev.filter((c) => c.id !== id));
+    logAudit('DELETE', 'Course', id, `${course.code} - ${course.name}`, JSON.stringify(course), undefined, 'Course permanently deleted');
+    api.deleteCourse(id).catch(() => {});
+  };
+
   const addActivity = (act: Omit<Activity, 'id'>) => {
     const id = 'act-' + Date.now();
     const newAct: Activity = {
@@ -1287,7 +1295,7 @@ export const AcademicProvider: React.FC<{ children: ReactNode }> = ({ children }
         softDeleteSemester,
         addCourse,
         updateCourse,
-        deleteCourse: softDeleteCourse,
+        deleteCourse,
         softDeleteCourse,
         updateCourseAssessmentScheme,
         addActivity,

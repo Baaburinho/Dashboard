@@ -20,6 +20,8 @@ import {
 import { useAcademic } from '../../context/AcademicContext';
 import { Activity, CourseNote, AssessmentScheme } from '../../types';
 import { Button } from '../ui/Button';
+import { CourseFormModal } from './CourseFormModal';
+import { CourseDeleteModal } from './CourseDeleteModal';
 
 export const CourseWorkspace: React.FC = () => {
   const {
@@ -31,6 +33,8 @@ export const CourseWorkspace: React.FC = () => {
     setSelectedCourseId,
     setActiveTab,
     updateCourse,
+    deleteCourse,
+    softDeleteCourse,
     updateCourseAssessmentScheme,
     addActivity,
     toggleActivityComplete,
@@ -41,6 +45,8 @@ export const CourseWorkspace: React.FC = () => {
   } = useAcademic();
 
   const [activeTabSub, setActiveTabSub] = useState<'overview' | 'activities' | 'notes' | 'attendance' | 'grades'>('overview');
+  const [isEditCourseModalOpen, setIsEditCourseModalOpen] = useState(false);
+  const [isDeleteCourseModalOpen, setIsDeleteCourseModalOpen] = useState(false);
 
   const course = courses.find((c) => c.id === selectedCourseId) || courses[0];
   const semester = semesters.find((s) => s.id === course?.semesterId);
@@ -165,6 +171,20 @@ export const CourseWorkspace: React.FC = () => {
           <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#F4E7A1] dark:bg-[#F4E7A1]/12 text-[#9B7A1D] dark:text-[#F4E7A1] border border-[#E8E1CF] dark:border-[#E8E1CF]/18">
             {semester?.name || 'Academic'}
           </span>
+          <button
+            onClick={() => setIsEditCourseModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 hover:border-[#C9A227] hover:text-[#C9A227] transition-all cursor-pointer shadow-2xs"
+          >
+            <Edit3 className="w-3.5 h-3.5 text-[#C9A227]" />
+            <span>Edit Course</span>
+          </button>
+          <button
+            onClick={() => setIsDeleteCourseModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-all cursor-pointer shadow-2xs"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>Delete</span>
+          </button>
         </div>
       </div>
 
@@ -790,6 +810,28 @@ export const CourseWorkspace: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Edit Course Modal */}
+      <CourseFormModal
+        isOpen={isEditCourseModalOpen}
+        onClose={() => setIsEditCourseModalOpen(false)}
+        courseToEdit={course}
+      />
+
+      {/* Delete Course Modal */}
+      <CourseDeleteModal
+        isOpen={isDeleteCourseModalOpen}
+        onClose={() => setIsDeleteCourseModalOpen(false)}
+        course={course}
+        onConfirmDelete={(id) => {
+          deleteCourse(id);
+          setActiveTab('courses');
+        }}
+        onConfirmArchive={(id) => {
+          softDeleteCourse(id);
+          setActiveTab('courses');
+        }}
+      />
     </div>
   );
 };

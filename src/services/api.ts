@@ -97,6 +97,12 @@ export const api = {
     });
   },
 
+  deleteCourse: async (id: string): Promise<{ success: boolean; id: string }> => {
+    return fetchJSON<{ success: boolean; id: string }>(`/courses/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
   updateCourseResults: async (
     id: string,
     data: { totalScore?: number; grade?: string; gradePoint?: number; provenance?: RecordProvenance; sourceNote?: string }

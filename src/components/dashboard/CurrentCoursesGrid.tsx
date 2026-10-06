@@ -9,11 +9,20 @@ import {
   Sparkles,
   MapPin,
   Calendar,
-  Layers
+  Layers,
+  Edit2,
+  Trash2
 } from 'lucide-react';
 import { useAcademic } from '../../context/AcademicContext';
+import { CourseFormModal } from '../courses/CourseFormModal';
+import { CourseDeleteModal } from '../courses/CourseDeleteModal';
+import { Course } from '../../types';
 
-export const CurrentCoursesGrid: React.FC = () => {
+interface CurrentCoursesGridProps {
+  onEditCourse?: (course: Course) => void;
+}
+
+export const CurrentCoursesGrid: React.FC<CurrentCoursesGridProps> = ({ onEditCourse }) => {
   const {
     activeSemesterCourses,
     activities,
@@ -21,10 +30,16 @@ export const CurrentCoursesGrid: React.FC = () => {
     setActiveTab,
     student,
     addCourse,
+    deleteCourse,
+    softDeleteCourse,
     currentSemester,
   } = useAcademic();
 
   const [isAddingSuggested, setIsAddingSuggested] = useState(false);
+  const [isCustomFormOpen, setIsCustomFormOpen] = useState(false);
+  const [localCourseToEdit, setLocalCourseToEdit] = useState<Course | null>(null);
+  const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const suggestedCourses = [
     { code: 'IT 401', name: 'Advanced Artificial Intelligence & Deep Learning', ch: 3, lecturer: 'Dr. Abdirashid Nur', room: 'Hall B-204' },
@@ -56,6 +71,22 @@ export const CurrentCoursesGrid: React.FC = () => {
     setActiveTab('course-detail');
   };
 
+  const handleEditClick = (e: React.MouseEvent, course: Course) => {
+    e.stopPropagation();
+    if (onEditCourse) {
+      onEditCourse(course);
+    } else {
+      setLocalCourseToEdit(course);
+      setIsCustomFormOpen(true);
+    }
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, course: Course) => {
+    e.stopPropagation();
+    setCourseToDelete(course);
+    setIsDeleteOpen(true);
+  };
+
   return (
     <div className="space-y-4">
       {/* Header Row */}
@@ -74,11 +105,22 @@ export const CurrentCoursesGrid: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => {
+              setLocalCourseToEdit(null);
+              setIsCustomFormOpen(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#171714] dark:text-[#F7F3E8] hover:text-[#C9A227] bg-[#FFFFFF] dark:bg-[#1E1D19] border border-[#E8E1CF] dark:border-[#3A372E] hover:border-[#C9A227] rounded-xl transition-all cursor-pointer shadow-2xs"
+          >
+            <Plus className="w-3.5 h-3.5 text-[#C9A227] dark:text-[#D4AF37]" />
+            <span>Add Course</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('courses')}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#171714] dark:text-[#F7F3E8] hover:text-[#C9A227] bg-[#FFFFFF] dark:bg-[#1E1D19] border border-[#E8E1CF] dark:border-[#3A372E] hover:border-[#C9A227] rounded-xl transition-all cursor-pointer shadow-2xs"
           >
             <Layers className="w-3.5 h-3.5 text-[#C9A227] dark:text-[#D4AF37]" />
-            <span>Manage All Courses</span>
+            <span className="hidden sm:inline">Manage All</span>
             <ChevronRight className="w-3.5 h-3.5 text-[#66645C] dark:text-[#B9B3A4]" />
           </button>
         </div>
@@ -99,55 +141,53 @@ export const CurrentCoursesGrid: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick-add suggestions strip */}
-          <div className="space-y-2.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-[#171714] dark:text-[#F7F3E8] flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#C9A227] dark:text-[#D4AF37]" />
-                <span>1-Click Quick Registration for Semester 7</span>
-              </span>
-              <span className="text-[11px] text-[#66645C] dark:text-[#B9B3A4]">
-                Click to register instantly
-              </span>
-            </div>
-
+          {/* Quick Onboarding Chips */}
+          <div className="space-y-3">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#66645C] dark:text-[#B9B3A4] block text-center">
+              Suggested Semester 7 Curricular Modules
+            </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {suggestedCourses.map((sug) => (
-                <button
-                  key={sug.code}
-                  disabled={isAddingSuggested}
-                  onClick={() => handleQuickAddSuggested(sug)}
-                  className="p-3.5 rounded-2xl bg-[#FFFDF5] dark:bg-[#151513] border border-[#E8E1CF] dark:border-[#3A372E] hover:border-[#C9A227] dark:hover:border-[#D4AF37] hover:bg-[#FFFFFF] dark:hover:bg-[#1E1D19] transition-all text-left flex flex-col justify-between group cursor-pointer shadow-2xs hover:shadow-xs"
+              {suggestedCourses.map((item) => (
+                <div
+                  key={item.code}
+                  className="p-3.5 rounded-2xl bg-[#FBF7E8]/70 dark:bg-[#171714] border border-[#E8E1CF] dark:border-[#3A372E] hover:border-[#C9A227] transition-all flex flex-col justify-between space-y-3"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-[#C9A227] dark:text-[#D4AF37] px-2 py-0.5 rounded bg-[#F4E7A1]/30 dark:bg-[#756B35]/20 border border-[#C9A227]/30">
-                        {sug.code}
+                      <span className="font-mono text-xs font-bold text-[#C9A227] dark:text-[#D4AF37]">
+                        {item.code}
                       </span>
-                      <span className="text-[10px] text-[#66645C] dark:text-[#B9B3A4] font-mono">
-                        {sug.ch} CH
+                      <span className="text-[10px] font-mono text-[#66645C] dark:text-[#B9B3A4]">
+                        {item.ch} CH
                       </span>
                     </div>
-                    <div className="font-semibold text-xs text-[#171714] dark:text-[#F7F3E8] group-hover:text-[#C9A227] dark:group-hover:text-[#D4AF37] transition-colors line-clamp-2 mt-1">
-                      {sug.name}
-                    </div>
+                    <p className="text-xs font-bold text-[#171714] dark:text-[#F7F3E8] line-clamp-2 leading-snug">
+                      {item.name}
+                    </p>
+                    <p className="text-[11px] text-[#66645C] dark:text-[#B9B3A4] truncate">
+                      {item.lecturer}
+                    </p>
                   </div>
 
-                  <div className="mt-3 pt-2 border-t border-[#E8E1CF]/50 dark:border-[#3A372E]/50 flex items-center justify-between text-[11px] text-[#66645C] dark:text-[#B9B3A4]">
-                    <span className="truncate">{sug.lecturer}</span>
-                    <span className="font-bold text-[#C9A227] dark:text-[#D4AF37] flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
-                      <span>+ Add</span>
-                    </span>
-                  </div>
-                </button>
+                  <button
+                    disabled={isAddingSuggested}
+                    onClick={() => handleQuickAddSuggested(item)}
+                    className="w-full py-1.5 rounded-xl bg-[#C9A227] hover:bg-[#B79122] text-[#171714] text-[11px] font-bold transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Register Module</span>
+                  </button>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Custom Add Button */}
           <div className="pt-2 text-center">
             <button
-              onClick={() => setActiveTab('courses')}
+              onClick={() => {
+                setLocalCourseToEdit(null);
+                setIsCustomFormOpen(true);
+              }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#171714] dark:bg-[#F7F3E8] text-[#FFFDF5] dark:text-[#171714] hover:bg-[#C9A227] dark:hover:bg-[#C9A227] hover:text-[#171714] text-xs font-semibold transition-all cursor-pointer shadow-sm hover:shadow-md"
             >
               <Plus className="w-4 h-4" />
@@ -169,14 +209,34 @@ export const CurrentCoursesGrid: React.FC = () => {
                 onClick={() => handleOpenCourse(course.id)}
                 className="group relative rounded-2xl bg-[#FFFFFF] dark:bg-[#1E1D19] border border-[#E8E1CF] dark:border-[#3A372E] hover:border-[#C9A227] dark:hover:border-[#D4AF37] p-5 shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
               >
-                {/* Top Code and CH badge */}
+                {/* Top Code, CH, and Action Buttons */}
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono font-bold text-[#C9A227] dark:text-[#D4AF37] px-2.5 py-1 rounded-lg bg-[#F4E7A1]/30 dark:bg-[#756B35]/20 border border-[#C9A227]/30">
-                    {course.code}
-                  </span>
-                  <span className="text-[11px] text-[#66645C] dark:text-[#B9B3A4] font-mono">
-                    {course.creditHours} Credit Hours
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-[#C9A227] dark:text-[#D4AF37] px-2.5 py-1 rounded-lg bg-[#F4E7A1]/30 dark:bg-[#756B35]/20 border border-[#C9A227]/30">
+                      {course.code}
+                    </span>
+                    <span className="text-[11px] text-[#66645C] dark:text-[#B9B3A4] font-mono">
+                      {course.creditHours} CH
+                    </span>
+                  </div>
+
+                  {/* Quick Edit & Delete Buttons */}
+                  <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={(e) => handleEditClick(e, course)}
+                      title="Edit Course"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-[#C9A227] hover:bg-[#FBF7E8] dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={(e) => handleDeleteClick(e, course)}
+                      title="Delete Course"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Course Name & Lecturer */}
@@ -240,6 +300,28 @@ export const CurrentCoursesGrid: React.FC = () => {
           })}
         </div>
       )}
+
+      {/* Local Modals for Add/Edit and Delete */}
+      <CourseFormModal
+        isOpen={isCustomFormOpen}
+        onClose={() => {
+          setIsCustomFormOpen(false);
+          setLocalCourseToEdit(null);
+        }}
+        courseToEdit={localCourseToEdit}
+        defaultSemesterId={currentSemester?.id}
+      />
+
+      <CourseDeleteModal
+        isOpen={isDeleteOpen}
+        onClose={() => {
+          setIsDeleteOpen(false);
+          setCourseToDelete(null);
+        }}
+        course={courseToDelete}
+        onConfirmDelete={(id) => deleteCourse(id)}
+        onConfirmArchive={(id) => softDeleteCourse(id)}
+      />
     </div>
   );
 };
